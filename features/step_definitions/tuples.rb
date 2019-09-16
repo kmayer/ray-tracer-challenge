@@ -6,14 +6,20 @@ ParameterType(
   name: 'varname',
   regexp: /[a-z][12]?|zero|norm/,
   transformer: -> ( match ) { "@#{match}".to_sym },
-  useForSnippets: false
+  use_for_snippets: false
+)
+
+ParameterType(
+  name: 'number',
+  regexp: /[-+]?[0-9]*\.?[0-9]+/,
+  transformer: -> ( match ) { Float(match) }
 )
 
 ParameterType(
   name: 'operand',
   regexp: /[\+\-\*\/]/,
   transformer: -> ( match ) { match },
-  useForSnippets: false
+  use_for_snippets: false
 )
 
 ParameterType(
@@ -23,10 +29,16 @@ ParameterType(
 )
 
 ParameterType(
+  name: 'color_attr',
+  regexp: /red|green|blue/,
+  transformer: -> (match) { match }
+)
+
+ParameterType(
   name: 'tuple_method',
   regexp: /magnitude|normalize|dot|cross/,
   transformer: -> ( match ) { match },
-  useForSnippets: false
+  use_for_snippets: false
 )
 
 ParameterType(
@@ -47,19 +59,32 @@ ParameterType(
   transformer: -> (x,y,z) { Vector[x,y,z] }
 )
 
+ParameterType(
+  name: 'color',
+  regexp: /Color\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
+  transformer: -> (x,y,z) { Color[x,y,z] }
+)
+
+ParameterType(
+  name: 'pvc',
+  regexp: /(Point|Vector|Color)\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
+  transformer: -> (klass,x,y,z) { Object.const_get(klass).new(x,y,z) }
+)
+
+
 Given("{varname} ← {tuple}") do |varname, tuple|
   instance_variable_set(varname, tuple)
 end
 
-Given("{varname} ← {point}") do |varname, point|
+Given("{varname} ← {pvc}") do |varname, point|
   instance_variable_set(varname, point)
 end
 
-Given("{varname} ← {vector}") do |varname, vector|
-  instance_variable_set(varname, vector)
+Then("{varname}.{tuple_attr} = {float}") do |varname, attr, float|
+  expect(instance_variable_get(varname).public_send(attr)).to eq float
 end
 
-Then("{varname}.{tuple_attr} = {float}") do |varname, attr, float|
+Then("{varname}.{color_attr} = {float}") do |varname, attr, float|
   expect(instance_variable_get(varname).public_send(attr)).to eq float
 end
 
@@ -91,23 +116,23 @@ Then("{varname} {operand} {varname} = {tuple}") do |var1, operand, var2, tuple|
   expect(instance_variable_get(var1).public_send(operand, instance_variable_get(var2))).to eq(tuple)
 end
 
-Then("{varname} {operand} {varname} = {point}") do |var1, operand, var2, point|
-  expect(instance_variable_get(var1).public_send(operand, instance_variable_get(var2))).to eq(point)
+Then("{varname} {operand} {varname} = {pvc}") do |var1, operand, var2, pvc|
+  expect(instance_variable_get(var1).public_send(operand, instance_variable_get(var2))).to be_within(EPSILON).of(pvc)
 end
 
-Then("{varname} {operand} {varname} = {vector}") do |var1, operand, var2, vector|
-  expect(instance_variable_get(var1).public_send(operand, instance_variable_get(var2))).to eq(vector)
+Then("{varname} {operand} {number} = {tuple}") do |var1, operand, number, tuple|
+  expect(instance_variable_get(var1).public_send(operand, number)).to eq(tuple)
 end
 
-Then("{varname} {operand} {float} = {tuple}") do |var1, operand, float, tuple|
-  expect(instance_variable_get(var1).public_send(operand, float)).to eq(tuple)
+Then("{varname} {operand} {number} = {pvc}") do |var1, operand, number, pvc|
+  expect(instance_variable_get(var1).public_send(operand, number)).to eq(pvc)
 end
 
-Then("{varname} {operand} {int} = {tuple}") do |var1, operand, int, tuple|
-  expect(instance_variable_get(var1).public_send(operand, int)).to eq(tuple)
+Then("{varname}.{tuple_method} = {number}") do |var, method, value|
+  expect(instance_variable_get(var).public_send(method)).to eq(value)
 end
 
-Then("{varname}.{tuple_method} = (√){int}") do |var, method, value|
+Then("{varname}.{tuple_method} = √{number}") do |var, method, value|
   expect(instance_variable_get(var).public_send(method)).to eq(Math.sqrt(value))
 end
 
@@ -115,11 +140,11 @@ Then("{varname}.{tuple_method} = (approximately ){vector}") do |var, method, vec
   expect(instance_variable_get(var).public_send(method)).to be_within(EPSILON).of(vector)
 end
 
-Then("{varname} {tuple_method} {varname} = {int}") do |var1, method, var2, float|
+Then("{varname} {tuple_method} {varname} = {number}") do |var1, method, var2, float|
   expect(instance_variable_get(var1).public_send(method, instance_variable_get(var2))).to eq(float)
 end
 
-Then("{varname} {tuple_method} {varname} = {vector}") do |var1, method, var2, vector|
+Then("{varname} {tuple_method} {varname} = {pvc}") do |var1, method, var2, vector|
   expect(instance_variable_get(var1).public_send(method, instance_variable_get(var2))).to eq(vector)
 end
 

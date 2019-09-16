@@ -1,0 +1,12 @@
+{
+  "bustagem.gems": [
+    "cucumber",
+    "cucumber-core",
+    "cucumber-expressions",
+    "cucumber-messages",
+    "cucumber-tag_expressions",
+    "cucumber-wire",
+    "gherkin",
+    "rake"
+  ]
+}

@@ -98,3 +98,19 @@ class Vector < Tuple
     self.class.new(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
   end
 end
+
+class Color < Tuple
+  class << self
+    def [](x,y,z)
+      new(x,y,z)
+    end
+  end
+
+  def initialize(x, y, z, w = 0)
+    super
+  end
+
+  alias_method :red, :x
+  alias_method :green, :y
+  alias_method :blue, :z
+end
