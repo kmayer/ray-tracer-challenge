@@ -101,13 +101,21 @@ end
 
 class Color < Tuple
   class << self
-    def [](x,y,z)
-      new(x,y,z)
+    def [](red, green, blue)
+      new(red, green, blue)
     end
   end
 
   def initialize(x, y, z, w = 0)
     super
+  end
+
+  def *(other)
+    if other.is_a?(Color)
+      self.class.new(red * other.red, green * other.green, blue * other.blue)
+    else
+      super
+    end
   end
 
   alias_method :red, :x
