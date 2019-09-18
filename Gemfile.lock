@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    ray_tracer (0.1.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -39,15 +44,31 @@ GEM
     multi_test (0.1.2)
     optimist (3.0.0)
     os (1.0.1)
-    rake (12.3.3)
+    rake (10.5.0)
+    rspec (3.8.0)
+      rspec-core (~> 3.8.0)
+      rspec-expectations (~> 3.8.0)
+      rspec-mocks (~> 3.8.0)
+    rspec-core (3.8.2)
+      rspec-support (~> 3.8.0)
+    rspec-expectations (3.8.4)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.8.0)
+    rspec-mocks (3.8.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.8.0)
+    rspec-support (3.8.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 1.17)
   cucumber (~> 4.0.0.rc.1)
   filewatcher
-  rake
+  rake (~> 10.0)
+  ray_tracer!
+  rspec (~> 3.0)
 
 BUNDLED WITH
    1.17.2
