@@ -23,10 +23,6 @@ class Tuple
     w == 0
   end
 
-  def ==(other)
-    x == Float(other.x) && y == Float(other.y) && z == Float(other.z) && w == other.w
-  end
-
   def -@
     self.class.new(-x, -y, -z, -w)
   end
@@ -66,6 +62,10 @@ class Tuple
   end
 
   # comparators
+  def ==(other)
+    x == Float(other.x) && y == Float(other.y) && z == Float(other.z) && w == other.w
+  end
+
   def <=(other)
     x <= other.x && y <= other.y && z <= other.z && w <= other.w
   end
@@ -121,4 +121,18 @@ class Color < Tuple
   alias_method :red, :x
   alias_method :green, :y
   alias_method :blue, :z
+
+  def to_a
+    [red, green, blue]
+  end
+
+  # Scale the color values to a maximum value
+  def scale(clamp_max)
+    self.class.new(
+      *to_a
+        .map { |rgb| rgb * clamp_max }
+        .map { |rgb| rgb.clamp(0, clamp_max) }
+        .map { |rgb| rgb.round(0, half: :even) }
+    )
+  end
 end

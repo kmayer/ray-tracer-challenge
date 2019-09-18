@@ -1,6 +1,6 @@
 ParameterType(
   name: 'varname',
-  regexp: /[a-z][12]?|zero|norm|red/,
+  regexp: /[a-z][1-3]?|zero|norm|red|ppm/,
   transformer: -> ( match ) { "@#{match}".to_sym },
   use_for_snippets: false
 )
