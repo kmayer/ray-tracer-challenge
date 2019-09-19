@@ -14,6 +14,18 @@ class Tuple
     freeze
   end
 
+  def to_a
+    [x, y, z, w]
+  end
+
+  def to_h
+    {x: x, y: y, z: z, w: w}
+  end
+
+  def to_s
+    to_h.to_s
+  end
+
   # unary operators
   def point?
     w == 1
@@ -81,6 +93,14 @@ class Point < Tuple
   def initialize(x, y, z, w = 1)
     super
   end
+
+  def to_a
+    [x, y, z]
+  end
+
+  def to_h
+    {x: x, y: y, z: z}
+  end
 end
 
 class Vector < Tuple
@@ -92,6 +112,14 @@ class Vector < Tuple
 
   def initialize(x, y, z, w = 0)
     super
+  end
+
+  def to_a
+    [x, y, z]
+  end
+
+  def to_h
+    {x: x, y: y, z: z}
   end
 
   def cross(other)
@@ -110,6 +138,14 @@ class Color < Tuple
     super
   end
 
+  def to_a
+    [red, green, blue]
+  end
+
+  def to_h
+    {red: red, green: green, blue: blue}
+  end
+  
   def *(other)
     if other.is_a?(Color)
       self.class.new(red * other.red, green * other.green, blue * other.blue)
