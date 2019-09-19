@@ -101,6 +101,10 @@ class Point < Tuple
   def to_h
     {x: x, y: y, z: z}
   end
+
+  def to_s
+    to_a.map(&:to_i).to_s
+  end
 end
 
 class Vector < Tuple

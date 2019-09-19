@@ -21,6 +21,12 @@ class Canvas
     @canvas.fetch(row)[col] = value.dup
   end
 
+  def plot(point, color)
+    x = point.x.to_i
+    y = height - point.y.to_i
+    self[x, y] = color
+  end
+
   def iterator
     (0...height).each do |row|
       (0...width).each do |col|
