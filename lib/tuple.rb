@@ -145,7 +145,11 @@ class Color < Tuple
   def to_h
     {red: red, green: green, blue: blue}
   end
-  
+
+  def to_s
+    "rgb(#{red}, #{green}, #{blue})"
+  end
+
   def *(other)
     if other.is_a?(Color)
       self.class.new(red * other.red, green * other.green, blue * other.blue)

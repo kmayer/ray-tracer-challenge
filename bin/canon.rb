@@ -41,7 +41,7 @@ while p.position.y >= 0 do
   x = p.position.x.to_i
   y = 550 - p.position.y.to_i
   c[x, y] = mark
-  puts c[x, y].to_s
+  puts [x, y].to_s
   p = p.tick(e)
 end
 
