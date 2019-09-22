@@ -1,3 +1,3 @@
-module RayTracer
+module RT
   VERSION = "0.1.0"
 end

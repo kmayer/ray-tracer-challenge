@@ -1,4 +1,4 @@
-require "canvas"
+require "ray_tracer/canvas"
 
 ParameterType(
   name: 'canvas_attr',
@@ -13,7 +13,7 @@ ParameterType(
 )
 
 Given("{varname} ← Canvas[{int}, {int}]") do |var, int, int2|
-  instance_variable_set(var, Canvas[int, int2])
+  instance_variable_set(var, RT::Canvas[int, int2])
 end
 
 Then("{varname}.{canvas_attr} = {int}") do |canvas, attr, value|

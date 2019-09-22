@@ -1,3 +1,4 @@
+module RT
 class Canvas
   class << self
     def [](width, height)
@@ -75,4 +76,5 @@ class Canvas
   def line_wrap(line, line_width: 70, break_sequence: "\n")
     (line.length > line_width) ? line.gsub(/(.{1,#{line_width}})(\s+|$)/, "\\1#{break_sequence}").strip : line
   end
+end
 end

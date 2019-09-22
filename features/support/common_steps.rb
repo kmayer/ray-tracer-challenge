@@ -41,31 +41,31 @@ ParameterType(
 ParameterType(
   name: 'tuple',
   regexp: /Tuple\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (x,y,z,w) { Tuple[x,y,z,w] }
+  transformer: -> (x,y,z,w) { RT::Tuple[x,y,z,w] }
 )
 
 ParameterType(
   name: 'point',
   regexp: /Point\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (x,y,z) { Point[x,y,z] }
+  transformer: -> (x,y,z) { RT::Point[x,y,z] }
 )
 
 ParameterType(
   name: 'vector',
   regexp: /Vector\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (x,y,z) { Vector[x,y,z] }
+  transformer: -> (x,y,z) { RT::Vector[x,y,z] }
 )
 
 ParameterType(
   name: 'color',
   regexp: /Color\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (x,y,z) { Color[x,y,z] }
+  transformer: -> (x,y,z) { RT::Color[x,y,z] }
 )
 
 ParameterType(
   name: 'pvc',
   regexp: /(Point|Vector|Color)\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (klass,x,y,z) { Object.const_get(klass).new(x,y,z) }
+  transformer: -> (klass,x,y,z) { Object.const_get("RT::#{klass}").new(x,y,z) }
 )
 
 Given("{varname} ← {pvc}") do |varname, point|

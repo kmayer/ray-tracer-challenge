@@ -1,6 +1,6 @@
-require "tuple"
+require "ray_tracer/tuple"
 
-EPSILON = Tuple[0.00001, 0.00001, 0.00001, 0.00001]
+EPSILON = RT::Tuple[0.00001, 0.00001, 0.00001, 0.00001]
 
 Given("{varname} ← {tuple}") do |varname, tuple|
   instance_variable_set(varname, tuple)

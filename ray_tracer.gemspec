@@ -5,7 +5,7 @@ require "ray_tracer/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "ray_tracer"
-  spec.version       = RayTracer::VERSION
+  spec.version       = RT::VERSION
   spec.authors       = ["Ken Mayer"]
   spec.email         = ["ken@bitwrangler.com"]
 

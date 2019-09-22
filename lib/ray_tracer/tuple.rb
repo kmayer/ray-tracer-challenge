@@ -1,3 +1,4 @@
+module RT
 class Tuple
   class << self
     def [](x,y,z,w)
@@ -179,4 +180,5 @@ class Color < Tuple
         .map { |rgb| rgb.round(0, half: :even) }
     )
   end
+end
 end

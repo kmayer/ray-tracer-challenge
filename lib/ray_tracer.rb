@@ -1,3 +1,6 @@
+module RT
+end
+
 require "ray_tracer/version"
-require "tuple"
-require "canvas"
+require "ray_tracer/tuple"
+require "ray_tracer/canvas"
