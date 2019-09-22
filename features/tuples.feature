@@ -1,4 +1,3 @@
-@focus
 Feature: Tuples, Vectors, and Points
 
 Scenario: A tuple with w=1.0 is a point
@@ -136,7 +135,7 @@ Scenario: Multiplying a color by a scalar
 Scenario: Multiplying colors
   Given c1 ← Color[1, 0.2, 0.4]
     And c2 ← Color[0.9, 1, 0.1]
-   Then c1 * c2 = Color[0.9, 0.2, 0.04]
+   Then c1 blend c2 = Color[0.9, 0.2, 0.04]
 
 Scenario: Reflecting a vector approaching at 45°
   Given v ← Vector[1, -1, 0]

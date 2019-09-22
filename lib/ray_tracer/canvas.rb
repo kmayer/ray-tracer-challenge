@@ -62,8 +62,7 @@ class Canvas
           @canvas
             .fetch(row)
             .map{ |pixel| pixel.scale(color_max) }
-            .map(&:to_a)
-            .map{ |elt| elt.map(&:to_i) }
+            .map(&:to_rgb)
         line = color_values.join(" ")
         buffer << line_wrap(line) << "\n"
       end

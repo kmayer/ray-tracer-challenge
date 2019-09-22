@@ -1,31 +1,21 @@
+require "matrix"
+
 module RT
-class Tuple
+class Tuple < ::Vector
   class << self
     def [](x,y,z,w)
-      new(x,y,z,w)
+      build([x,y,z,w])
+    end
+
+    def build(array)
+      elements(array.map{ |i| Float(i) })
     end
   end
 
-  attr_reader :x,:y,:z,:w
-  def initialize(x,y,z,w)
-    @x = Float(x)
-    @y = Float(y)
-    @z = Float(z)
-    @w = Float(w)
-    freeze
-  end
-
-  def to_a
-    [x, y, z, w]
-  end
-
-  def to_h
-    {x: x, y: y, z: z, w: w}
-  end
-
-  def to_s
-    to_h.to_s
-  end
+  def x; element(0); end
+  def y; element(1); end
+  def z; element(2); end
+  def w; element(3); end
 
   # unary operators
   def point?
@@ -36,47 +26,12 @@ class Tuple
     w == 0
   end
 
-  def -@
-    self.class.new(-x, -y, -z, -w)
-  end
-
   def abs
-    self.class.new(x.abs, y.abs, z.abs, w.abs)
-  end
-
-  def magnitude
-    Math.sqrt(x**2 + y**2 + z**2)
+    self.class.build(to_a.map(&:abs))
   end
 
   def normalize
     self / magnitude
-  end
-
-  # inline operators
-  def +(other)
-    self.class.new(x + other.x, y + other.y, z + other.z, w + other.w)
-  end
-
-  def -(other)
-    self.class.new(x - other.x, y - other.y, z - other.z, w - other.w)
-  end
-
-  def *(scalar)
-    self.class.new(x * scalar, y * scalar, z * scalar, w * scalar)
-  end
-
-  def /(scalar)
-    self.class.new(x / scalar, y / scalar, z / scalar, w / scalar)
-  end
-
-  # other methods
-  def dot(other)
-    x * other.x + y * other.y + z * other.z + w * other.w
-  end
-
-  # comparators
-  def ==(other)
-    x == Float(other.x) && y == Float(other.y) && z == Float(other.z) && w == other.w
   end
 
   def <=(other)
@@ -87,98 +42,50 @@ end
 class Point < Tuple
   class << self
     def [](x,y,z)
-      new(x,y,z)
+      build([x,y,z,1])
     end
-  end
-
-  def initialize(x, y, z, w = 1)
-    super
-  end
-
-  def to_a
-    [x, y, z]
-  end
-
-  def to_h
-    {x: x, y: y, z: z}
-  end
-
-  def to_s
-    to_a.map(&:to_i).to_s
   end
 end
 
 class Vector < Tuple
   class << self
     def [](x,y,z)
-      new(x,y,z)
+      build([x,y,z,0])
     end
   end
 
-  def initialize(x, y, z, w = 0)
-    super
-  end
-
-  def to_a
-    [x, y, z]
-  end
-
-  def to_h
-    {x: x, y: y, z: z}
+  def to_v
+    ::Vector.elements(first(3))
   end
 
   def cross(other)
-    self.class.new(y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x)
+    self.class.build(to_v.cross(other.to_v).to_a << 0)
   end
 end
 
-class Color < Tuple
-  class << self
-    def [](red, green, blue)
-      new(red, green, blue)
-    end
-  end
-
-  def initialize(x, y, z, w = 0)
-    super
-  end
-
-  def to_a
-    [red, green, blue]
-  end
-
-  def to_h
-    {red: red, green: green, blue: blue}
-  end
-
-  def to_s
-    "rgb(#{red}, #{green}, #{blue})"
-  end
-
-  def *(other)
-    if other.is_a?(Color)
-      self.class.new(red * other.red, green * other.green, blue * other.blue)
-    else
-      super
-    end
-  end
-
+class Color < Vector
   alias_method :red, :x
   alias_method :green, :y
   alias_method :blue, :z
 
-  def to_a
-    [red, green, blue]
+  def to_rgb
+    [red, green, blue].map(&:to_i)
+  end
+  
+  # Color blending
+  def blend(other)
+    fail ArgumentError, other unless other.is_a?(Color)
+    self.class[red * other.red, green * other.green, blue * other.blue]
   end
 
   # Scale the color values to a maximum value
   def scale(clamp_max)
-    self.class.new(
-      *to_a
+    self.class[
+      *[red, green, blue]
         .map { |rgb| rgb * clamp_max }
         .map { |rgb| rgb.clamp(0, clamp_max) }
-        .map { |rgb| rgb.round(0, half: :even) }
-    )
+        .map { |rgb| rgb.round(0, half: :even) } 
+    ]
   end
 end
 end

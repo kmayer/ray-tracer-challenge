@@ -71,7 +71,7 @@ Then("{varname} {tuple_method} {varname} = {number}") do |var1, method, var2, fl
 end
 
 Then("{varname} {tuple_method} {varname} = {pvc}") do |var1, method, var2, vector|
-  expect(instance_variable_get(var1).public_send(method, instance_variable_get(var2))).to eq(vector)
+  expect(instance_variable_get(var1).public_send(method, instance_variable_get(var2))).to be_within(EPSILON).of(vector)
 end
 
 When("{varname} ← {varname}.{tuple_method}") do |var1, var2, method|

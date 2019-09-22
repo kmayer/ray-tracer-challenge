@@ -33,7 +33,7 @@ ParameterType(
 
 ParameterType(
   name: 'tuple_method',
-  regexp: /magnitude|normalize|dot|cross/,
+  regexp: /magnitude|normalize|dot|cross|blend/,
   transformer: -> ( match ) { match },
   use_for_snippets: false
 )
@@ -65,7 +65,7 @@ ParameterType(
 ParameterType(
   name: 'pvc',
   regexp: /(Point|Vector|Color)\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (klass,x,y,z) { Object.const_get("RT::#{klass}").new(x,y,z) }
+  transformer: -> (klass,x,y,z) { Object.const_get("RT::#{klass}").send(:[], x, y, z) }
 )
 
 Given("{varname} ← {pvc}") do |varname, point|
