@@ -12,6 +12,14 @@ class Tuple < ::Vector
     end
   end
 
+  def inspect
+    "#{self.class}#{to_a}"
+  end
+
+  def to_s
+    inspect
+  end
+
   def x; element(0); end
   def y; element(1); end
   def z; element(2); end

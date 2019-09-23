@@ -32,6 +32,20 @@ module RT
     end
     alias_method :row_count, :height
 
+    def inspect
+      "#{self.class}#{m}"
+    end
+
+    def to_s
+      inspect
+    end
+
+    def pretty(f = "% 9.5f")
+      rows.map do |r|
+        " | " << r.to_a.map {|v| format(f, v)}.join(" | ") << " | "
+      end.join("\n")
+    end
+
     def size
       return height if height == width
     end
