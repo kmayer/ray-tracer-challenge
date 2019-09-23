@@ -1,5 +1,9 @@
+require "ray_tracer/tuple"
+
+TUPLES = { "point" => RT::Point, "vector" => RT::Vector, "color" => RT::Color}
+
 ParameterType(
-  name: 'varname',
+  name: 'tvar',
   regexp: /[a-z][1-3]?|zero|norm|red|ppm/,
   transformer: -> ( match ) { "@#{match}".to_sym },
   use_for_snippets: false
@@ -40,7 +44,7 @@ ParameterType(
 
 ParameterType(
   name: 'tuple',
-  regexp: /Tuple\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
+  regexp: /tuple\(([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\)/,
   transformer: -> (x,y,z,w) { RT::Tuple[x,y,z,w] }
 )
 
@@ -52,22 +56,24 @@ ParameterType(
 
 ParameterType(
   name: 'vector',
-  regexp: /Vector\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
+  regexp: /vector\(([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\)/,
   transformer: -> (x,y,z) { RT::Vector[x,y,z] }
 )
 
 ParameterType(
   name: 'color',
-  regexp: /Color\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
+  regexp: /color\(([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\)/,
   transformer: -> (x,y,z) { RT::Color[x,y,z] }
 )
 
 ParameterType(
   name: 'pvc',
-  regexp: /(Point|Vector|Color)\[([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\]/,
-  transformer: -> (klass,x,y,z) { Object.const_get("RT::#{klass}").send(:[], x, y, z) }
+  regexp: /(point|vector|color)\(([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\)/,
+  transformer: -> (klass,x,y,z) { 
+    TUPLES[klass].send(:[], x, y, z) 
+  }
 )
 
-Given("{varname} ← {pvc}") do |varname, point|
+Given("{tvar} ← {pvc}") do |varname, point|
   instance_variable_set(varname, point)
 end
