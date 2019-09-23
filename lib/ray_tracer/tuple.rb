@@ -16,6 +16,7 @@ class Tuple < ::Vector
   def y; element(1); end
   def z; element(2); end
   def w; element(3); end
+  def fetch(i); element(i); end
 
   # unary operators
   def point?
