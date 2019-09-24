@@ -16,6 +16,50 @@ module RT
       def identity(n)
         build(n,n) { |i,j| i == j ? 1 : 0 }
       end
+
+      # Build a translation matrix by first building an identity matrix
+      # then composing (adding) the translation vector to the last column
+      def translation(x, y, z)
+        identity(4) + build(4,4) { |i,j| j != 3 ? 0 : [x,y,z,0].fetch(i) }
+      end
+
+      # Build a scaling matrix by placing the scaling vector along the diagonal
+      def scaling(x, y, z)
+        build(4,4) { |i,j| i != j ? 0 : [x,y,z,1].fetch(i) }
+      end
+
+      def rotation_x(r)
+        matrix =
+        [
+          [1,           0,            0, 0],
+          [0, Math.cos(r), -Math.sin(r), 0],
+          [0, Math.sin(r),  Math.cos(r), 0],
+          [0,           0,            0, 1],
+        ]
+        build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
+      end
+
+      def rotation_y(r)
+        matrix =
+        [
+          [ Math.cos(r), 0, Math.sin(r), 0],
+          [           0, 1,           0, 0],
+          [-Math.sin(r), 0, Math.cos(r), 0],
+          [           0, 0,           0, 1],
+        ]
+        build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
+      end
+
+      def rotation_z(r)
+        matrix =
+        [
+          [Math.cos(r), -Math.sin(r), 0, 0],
+          [Math.sin(r),  Math.cos(r), 0, 0],
+          [          0,            0, 1, 0],
+          [          0,            0, 0, 1],
+        ]
+        build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
+      end
     end
 
     attr_reader :m, :height, :width
@@ -29,6 +73,7 @@ module RT
           @m[row][col] = yield row, col
         end
       end
+      # TODO: Freeze the Array
     end
     alias_method :row_count, :height
 
@@ -51,6 +96,7 @@ module RT
     end
 
     def [](i, j)
+      fail ArgumentError, [i, j] if i.negative? || j.negative?
       m.fetch(i).fetch(j)
     end
 
@@ -59,15 +105,15 @@ module RT
     end
 
     def col(j)
-      RT::Tuple.build(m.map {|r| r.fetch(j) })
+      RT::Tuple.build(m.map { |r| r.fetch(j) })
     end
 
     def rows
-      (0...height).map {|i| row(i) }
+      (0...height).map { |i| row(i) }
     end
 
     def cols
-      (0...width).map {|j| col(j)}
+      (0...width).map { |j| col(j) }
     end
 
     def ==(other)
@@ -85,6 +131,10 @@ module RT
       when RT::Tuple
         RT::Tuple.build((0...height).map { |i| row(i).dot(other) })
       end
+    end
+
+    def +(other)
+      self.class.build(height, width) { |i,j| self[i,j] + other[i,j] }
     end
 
     def -(other)
