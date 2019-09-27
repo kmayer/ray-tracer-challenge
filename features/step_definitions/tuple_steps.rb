@@ -58,10 +58,6 @@ Then('{tuple_method}\({tvar}) = {number}') do |method, var, value|
   expect(instance_variable_get(var).public_send(method)).to eq(value)
 end
 
-Then('{tuple_method}\({tvar}) = √{number}') do |method, var, value|
-  expect(instance_variable_get(var).public_send(method)).to eq(Math.sqrt(value))
-end
-
 Then('{tuple_method}\({tvar}) = (approximately ){vector}') do |method, var, vector|
   expect(instance_variable_get(var).public_send(method)).to be_within(EPSILON).of(vector)
 end

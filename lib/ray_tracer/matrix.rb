@@ -1,6 +1,10 @@
+require 'ice_nine'
+require 'ice_nine/core_ext/object'
+
 module RT
   class Matrix
     class << self
+      include Math
       private :new
     
       def build(height, width, &block)
@@ -13,28 +17,42 @@ module RT
         new(rows, cols) { |row, col| data[row][col] }
       end
 
-      def identity(n)
+      def identity(n = 4)
         build(n,n) { |i,j| i == j ? 1 : 0 }
       end
 
       # Build a translation matrix by first building an identity matrix
       # then composing (adding) the translation vector to the last column
       def translation(x, y, z)
-        identity(4) + build(4,4) { |i,j| j != 3 ? 0 : [x,y,z,0].fetch(i) }
+        matrix = 
+        [
+          [1, 0, 0, x],
+          [0, 1, 0, y],
+          [0, 0, 1, z],
+          [0, 0, 0, 1]
+        ]
+        build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
       end
 
       # Build a scaling matrix by placing the scaling vector along the diagonal
       def scaling(x, y, z)
-        build(4,4) { |i,j| i != j ? 0 : [x,y,z,1].fetch(i) }
+        matrix = 
+        [
+          [x, 0, 0, 0],
+          [0, y, 0, 0],
+          [0, 0, z, 0],
+          [0, 0, 0, 1]
+        ]
+        build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
       end
 
       def rotation_x(r)
         matrix =
         [
-          [1,           0,            0, 0],
-          [0, Math.cos(r), -Math.sin(r), 0],
-          [0, Math.sin(r),  Math.cos(r), 0],
-          [0,           0,            0, 1],
+          [1,      0,       0, 0],
+          [0, cos(r), -sin(r), 0],
+          [0, sin(r),  cos(r), 0],
+          [0,      0,       0, 1],
         ]
         build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
       end
@@ -42,10 +60,10 @@ module RT
       def rotation_y(r)
         matrix =
         [
-          [ Math.cos(r), 0, Math.sin(r), 0],
-          [           0, 1,           0, 0],
-          [-Math.sin(r), 0, Math.cos(r), 0],
-          [           0, 0,           0, 1],
+          [ cos(r), 0, sin(r), 0],
+          [      0, 1,      0, 0],
+          [-sin(r), 0, cos(r), 0],
+          [      0, 0,      0, 1],
         ]
         build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
       end
@@ -53,13 +71,25 @@ module RT
       def rotation_z(r)
         matrix =
         [
-          [Math.cos(r), -Math.sin(r), 0, 0],
-          [Math.sin(r),  Math.cos(r), 0, 0],
-          [          0,            0, 1, 0],
-          [          0,            0, 0, 1],
+          [cos(r), -sin(r), 0, 0],
+          [sin(r),  cos(r), 0, 0],
+          [     0,       0, 1, 0],
+          [     0,       0, 0, 1],
         ]
         build(4,4) { |i,j| matrix.fetch(i).fetch(j) }
       end
+
+      def shearing(xy, xz, yx, yz, zx, zy)
+        matrix = 
+        [
+          [1, xy, xz, 0],
+          [yx, 1, yz, 0],
+          [zx, zy, 1, 0],
+          [ 0,  0, 0, 1]
+        ]
+        build(4,4) { |i,j| matrix.fetch(i).fetch(j) }      
+      end
+      alias_method :skew, :shearing
     end
 
     attr_reader :m, :height, :width
@@ -73,7 +103,7 @@ module RT
           @m[row][col] = yield row, col
         end
       end
-      # TODO: Freeze the Array
+      deep_freeze
     end
     alias_method :row_count, :height
 
@@ -129,7 +159,9 @@ module RT
       when RT::Matrix
         self.class.build(height, width) { |i,j| row(i).dot(other.col(j)) }
       when RT::Tuple
-        RT::Tuple.build((0...height).map { |i| row(i).dot(other) })
+        other.class.build((0...size).map { |i| row(i).dot(other) })
+      else
+        fail ArgumentError, other.inspect
       end
     end
 
@@ -181,6 +213,32 @@ module RT
       fail if !invertible?
       det = determinant
       self.class.build(height, width) { |j, i| cofactor(i,j) / det }
+    end
+    alias_method :invert, :inverse
+
+    # Fluent interface
+    def translate(x, y, z)
+      self.class.translation(x, y, z) * self
+    end
+
+    def scale(x, y, z)
+      self.class.scaling(x, y, z) * self
+    end
+
+    def rotate_x(r)
+      self.class.rotation_x(r) * self
+    end
+
+    def rotate_y(r)
+      self.class.rotation_y(r) * self
+    end
+
+    def rotate_z(r)
+      self.class.rotation_z(r) * self
+    end
+
+    def shear(xy, xz, yx, yz, zx, zy)
+      self.class.shearing(xy, xz, yx, yz, zx, zy) * self
     end
 
     private

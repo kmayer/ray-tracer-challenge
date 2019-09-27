@@ -4,15 +4,19 @@ TUPLES = { "point" => RT::Point, "vector" => RT::Vector, "color" => RT::Color}
 
 ParameterType(
   name: 'tvar',
-  regexp: /[a-z][1-3]?|zero|norm|red|ppm/,
+  regexp: /[a-z][1-4]?|zero|norm|red|ppm/,
   transformer: -> ( match ) { "@#{match}".to_sym },
   use_for_snippets: false
 )
 
 ParameterType(
   name: 'number',
-  regexp: /[-+]?[0-9]*\.?[0-9]+/,
-  transformer: -> ( match ) { Float(match) }
+  regexp: /([-+]?)([√]?)([0-9]*\.?[0-9]+)/,
+  transformer: -> ( sign, sqrt, digits ) { 
+    number = Float(digits)
+    number = (sqrt == "√" ? Math.sqrt(number) : number)
+    number * ( sign == "-" ? -1 : 1)
+  }
 )
 
 ParameterType(

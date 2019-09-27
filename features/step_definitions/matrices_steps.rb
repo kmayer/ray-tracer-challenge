@@ -2,7 +2,7 @@ require "ray_tracer/matrix"
 
 ParameterType(
   name: 'mvar',
-  regexp: /[A-Z]/,
+  regexp: /transform|inv|half_quarter|full_quarter|[A-Z]/,
   transformer: -> ( match ) { "@matrix_#{match}".to_sym },
   use_for_snippets: false
 )
