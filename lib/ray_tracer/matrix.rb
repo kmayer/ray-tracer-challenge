@@ -152,7 +152,7 @@ module RT
 
     def <=(other)
       iterator.all? { |value,row,col| value <= other[row,col] }
-    end      
+    end
 
     def *(other)
       case other
@@ -164,6 +164,9 @@ module RT
         fail ArgumentError, other.inspect
       end
     end
+    # Allows creating a matrix named "transform" and then writing code:
+    # transform.(<Tuple>) => <Tuple>
+    alias_method :call, :*
 
     def +(other)
       self.class.build(height, width) { |i,j| self[i,j] + other[i,j] }
