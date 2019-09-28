@@ -4,22 +4,17 @@ require "bundler/setup"
 require "ray_tracer"
 
 module RT
-  c = Canvas[500, 500];nil
-
+  c = Canvas[500, 500]
   NOON = Point[0, 1, 0]
-  point = NOON.dup # "Noon"
+  PLOT_COLOR = Color[1, 1, 1] # "white"
 
-  one_twelfth_rotation = RT::Matrix.rotation_z((2 * Math::PI) / 12)
-  scale = RT::Matrix.scaling(200, 200, 0)
-  translate = RT::Matrix.translation(250, 250, 0)
+  (0..11).each do |hour|
+    transform = Matrix
+                .rotation_z((hour / 12.0) * (2 * Math::PI))
+                .scale(200, 200, 0)
+                .translate(250, 250, 0)
 
-  plot_color = Color[1, 1, 1] # "white"
-
-  (0..11).each do
-    plot_point = scale * point
-    plot_point = translate * plot_point
-    c.plot(plot_point, plot_color)
-    point = one_twelfth_rotation * point
+    c.plot(transform.(NOON), PLOT_COLOR)
   end
 
   file = "artifacts/ch04-clock.ppm"
