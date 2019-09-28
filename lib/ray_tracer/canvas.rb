@@ -24,7 +24,7 @@ class Canvas
 
   def plot(point, color)
     x = point.x.to_i
-    y = height - point.y.to_i
+    y = (height - 1) - point.y.to_i
     self[x, y] = color
   end
 
