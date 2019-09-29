@@ -1,4 +1,4 @@
-require "matrix"
+require "matrix" # Native ::Matrix class
 
 module RT
 class Tuple < ::Vector
@@ -12,6 +12,7 @@ class Tuple < ::Vector
     end
   end
 
+  # Override because the ::Vector class hardwires the class name in #inspect
   def inspect
     "#{self.class}#{to_a}"
   end
@@ -32,11 +33,11 @@ class Tuple < ::Vector
   end
 
   def vector?
-    w == 0
+    w.zero?
   end
 
   def abs
-    self.class.build(to_a.map(&:abs))
+    collect(&:abs)
   end
 
   def <=(other)
@@ -63,14 +64,14 @@ class Vector < Tuple
     end
   end
 
-  def to_v
-    ::Vector.elements(first(3))
-  end
-
   # The cross product of our vectors is only the first 3 elements
   # The fourth element indicates point/vector identity, but also
   # because the math works out that way. Using ::Vector's native
-  # #cross method breaks becaus of the fourth element.
+  # #cross method breaks because of the fourth element.
+  def to_v
+    ::Vector[x, y, z]
+  end
+
   def cross(other)
     self.class.build(to_v.cross(other.to_v).to_a << 0)
   end

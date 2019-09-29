@@ -1,11 +1,9 @@
-require 'ice_nine'
-require 'ice_nine/core_ext/object'
-require "matrix"
+require "matrix" # Native ::Matrix class
 
 # Monkey patch ::Matrix so that everything is frozen
-# Can't use refiniments on #initialize because it is
+# Can't use refinements on #initialize because it is
 # called using #send from .new
-class ::Matrix
+class Matrix
   def initialize(rows, column_count = rows[0].size)
     @rows = rows
     @column_count = column_count
@@ -96,13 +94,14 @@ module RT
     end
 
     def <=(other)
-      each_with_index.all? { |value,row,col| value <= other[row,col] }
+      each_with_index.all? { |value, row, col| value <= other[row, col] }
     end
 
     def abs
       collect(&:abs)
     end
 
+    # Return *our* Vector classes instead of the native ones.
     def *(other)
       product = super
       if product.is_a?(::Vector) && product.size == 4
@@ -112,6 +111,7 @@ module RT
       end
     end
 
+    # Because Jamis uses #submatrix for #first_minor
     alias_method :submatrix, :first_minor
 
     # This overrides Matrix#minor which is a generalized form of #first_minor
@@ -124,6 +124,14 @@ module RT
       !determinant.zero?
     end
 
+    # Overrides Matrix.inverse because the native method modifies a frozen Array
+    def inverse
+      fail unless invertible?
+
+      d = determinant
+      self.class.build(row_count) { |j, i| cofactor(i, j) / Rational(d) }
+      #                              ^^^^ notice transposed args
+    end
     alias_method :invert, :inverse
 
     # Fluent interface

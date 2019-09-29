@@ -41,5 +41,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "cucumber", "~> 4.0.0.rc.1"
   spec.add_development_dependency "filewatcher"
-  spec.add_dependency "ice_nine", "~> 0.11.2"
 end
