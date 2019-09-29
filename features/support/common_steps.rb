@@ -6,14 +6,14 @@ EPSILON_FLOAT = 1e-15
 
 ParameterType(
   name: 'var',
-  regexp: /[a-z][a-z0-9]?/,
+  regexp: /[a-z][a-z0-9]?|ppm/,
   transformer: ->(match) { "@#{match}".to_sym },
   use_for_snippets: false
 )
 
 ParameterType(
   name: 'tvar',
-  regexp: /[a-z][1-4]?|zero|norm|red|ppm|origin|direction/,
+  regexp: /[a-z][1-4]?|zero|norm|red|origin|direction/,
   transformer: -> ( match ) { "@#{match}".to_sym },
   use_for_snippets: false
 )
@@ -21,7 +21,7 @@ ParameterType(
 ParameterType(
   name: 'number',
   regexp: /([-+]?)([√]?)([0-9]*\.?[0-9]+)/,
-  transformer: -> ( sign, sqrt, digits ) { 
+  transformer: -> ( sign, sqrt, digits ) {
     number = Float(digits)
     number = (sqrt == "√" ? Math.sqrt(number) : number)
     number * ( sign == "-" ? -1 : 1)
@@ -82,8 +82,8 @@ ParameterType(
 ParameterType(
   name: 'pvc',
   regexp: /(point|vector|color)\(([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+),\s*([-+]?[0-9]*\.?[0-9]+)\s*\)/,
-  transformer: -> (klass,x,y,z) { 
-    TUPLES[klass].send(:[], x, y, z) 
+  transformer: -> (klass,x,y,z) {
+    TUPLES[klass].send(:[], x, y, z)
   }
 )
 

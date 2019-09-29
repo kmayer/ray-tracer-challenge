@@ -34,3 +34,13 @@ end
 Then("{var} is nothing") do |i|
   expect(instance_variable_get(i)).to be_nil
 end
+
+
+And('{var} ← intersections\({var}, {var}, {var}, {var})') do |xs, i1, i2, i3, i4|
+  instance_variable_set(xs, [
+    instance_variable_get(i1),
+    instance_variable_get(i2),
+    instance_variable_get(i3),
+    instance_variable_get(i4)
+  ])
+end

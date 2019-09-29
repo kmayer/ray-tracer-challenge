@@ -34,7 +34,7 @@ When('{var} ← canvas_to_ppm\({tvar})') do |var, canvas|
   instance_variable_set(var, instance_variable_get(canvas).to_ppm)
 end
 
-Then("lines {int}-{int} of {tvar} are") do |l0, l1, var, string|
+Then("lines {int}-{int} of {var} are") do |l0, l1, var, string|
   l0 -= 1
   l1 -= 1
   lines = instance_variable_get(var).split("\n")
@@ -42,7 +42,7 @@ Then("lines {int}-{int} of {tvar} are") do |l0, l1, var, string|
 end
 
 When("every pixel of {var} is set to {color}") do |canvas, color|
-  instance_variable_get(canvas).pixels=(color)  
+  instance_variable_get(canvas).pixels=(color)
 end
 
 Then("{var} ends with a newline character") do |ppm|

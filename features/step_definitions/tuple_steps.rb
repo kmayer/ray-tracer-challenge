@@ -21,11 +21,11 @@ Then("{tvar} is not a point") do |varname|
 end
 
 Then("{tvar} is a vector") do |varname|
-  expect(@a.vector?).to be
+  expect(instance_variable_get(varname).vector?).to be
 end
 
 Then("{tvar} is not a vector") do |varname|
-  expect(@a.vector?).not_to be
+  expect(instance_variable_get(varname).vector?).not_to be
 end
 
 Then("{tvar} = {tuple}") do |varname, tuple|
