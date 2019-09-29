@@ -1,10 +1,19 @@
 require "ray_tracer/tuple"
 
 TUPLES = { "point" => RT::Point, "vector" => RT::Vector, "color" => RT::Color}
+EPSILON_TUPLE = RT::Tuple[0.00001, 0.00001, 0.00001, 0.00001]
+EPSILON_FLOAT = 1e-15
+
+ParameterType(
+  name: 'var',
+  regexp: /[a-z][a-z0-9]?/,
+  transformer: ->(match) { "@#{match}".to_sym },
+  use_for_snippets: false
+)
 
 ParameterType(
   name: 'tvar',
-  regexp: /[a-z][1-4]?|zero|norm|red|ppm/,
+  regexp: /[a-z][1-4]?|zero|norm|red|ppm|origin|direction/,
   transformer: -> ( match ) { "@#{match}".to_sym },
   use_for_snippets: false
 )

@@ -67,13 +67,14 @@ Then('transpose\({mvar}) is the following matrix:') do |matrix, table|
   expect(m.transpose).to eq(z)
 end
 
-Given('A ← transpose\(identity_matrix)') do
-  @a = RT::Matrix.identity(2).transpose
+Given('{mvar} ← transpose\(identity_matrix)') do |matrix|
+  instance_variable_set(matrix, RT::Matrix.identity(2).transpose)
 end
 
-Then("A = identity_matrix") do
-  i = RT::Matrix.identity(@a.row_count)
-  expect(@a).to eq(i)
+Then("{mvar} = identity_matrix") do |matrix|
+  a = instance_variable_get(matrix)
+  i = RT::Matrix.identity(a.row_count)
+  expect(a).to eq(i)
 end
 
 Then('determinant\({mvar}) = {number}') do |matrix, number|
@@ -118,7 +119,7 @@ end
 
 Then('{mvar}[{int},{int}] = {number}\/{number}') do |matrix, int, int2, number, number2|
   m = instance_variable_get(matrix)
-  expect(m[int,int2]).to be_within(1e-15).of(number/number2)
+  expect(m[int,int2]).to be_within(EPSILON_FLOAT).of(number/number2)
 end
 
 Then("{mvar} is the following {int}x{int} matrix:") do |matrix, int, int2, table|

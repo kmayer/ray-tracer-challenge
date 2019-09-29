@@ -11,12 +11,12 @@ Then('{tvar} ← {mvar} * {tvar}') do |point, matrix, point2|
 end
 
 Then('{tvar} = point\({int}, {int}, {int})') do |point, x, y, z|
-  expect(instance_variable_get(point)).to be_within(EPSILON).of(RT::Point[x,y,z])
+  expect(instance_variable_get(point)).to be_within(EPSILON_TUPLE).of(RT::Point[x,y,z])
 end
 
 Then("{mvar} * {tvar} = {pvc}") do |matrix, point, new_point|
   p = instance_variable_get(point)
-  expect(instance_variable_get(matrix) * p).to be_within(EPSILON).of(new_point)
+  expect(instance_variable_get(matrix) * p).to be_within(EPSILON_TUPLE).of(new_point)
 end
 
 Then("{mvar} * {tvar} = {tvar}") do |matrix, point, point2|
@@ -40,20 +40,20 @@ Then('{mvar} * {tvar} = point\({number}\/{number}, {number}, {number}\/{number})
   p = instance_variable_get(point)
   p1 = RT::Point[n/n2, n3, n4/n5]
   epsilon = RT::Matrix.build(p.size, p.size) { |i,j| 0.00001 }
-  expect(instance_variable_get(matrix) * p).to be_within(EPSILON).of(p1)
+  expect(instance_variable_get(matrix) * p).to be_within(EPSILON_TUPLE).of(p1)
 end
 
 Then('{mvar} * {tvar} = point\({number}\/{number}, {number}\/{number}, {number})') do |matrix, point, n, n2, n3, n4, n5|
   p = instance_variable_get(point)
   p1 = RT::Point[n/n2, n3/n4, n5]
   epsilon = RT::Matrix.build(p.size, p.size) { |i,j| 0.00001 }
-  expect(instance_variable_get(matrix) * p).to be_within(EPSILON).of(p1)
+  expect(instance_variable_get(matrix) * p).to be_within(EPSILON_TUPLE).of(p1)
 end
 
 Then('{mvar} * {tvar} = point\({number}, {number}\/{number}, {number}\/{number})') do |matrix,point, n, n2, n3, n4, n5|
   p = instance_variable_get(point)
   p1 = RT::Point[n, n2/n3, n4/n5]
-  expect(instance_variable_get(matrix) * p).to be_within(EPSILON).of(p1)
+  expect(instance_variable_get(matrix) * p).to be_within(EPSILON_TUPLE).of(p1)
 end
 
 Given('transform ← shearing\({int}, {int}, {int}, {int}, {int}, {int})') do |xy, xz, yx, yz, zx, zy|

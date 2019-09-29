@@ -1,7 +1,5 @@
 require "ray_tracer/tuple"
 
-EPSILON = RT::Tuple[0.00001, 0.00001, 0.00001, 0.00001]
-
 Given("{tvar} ← {tuple}") do |varname, tuple|
   instance_variable_set(varname, tuple)
 end
@@ -43,7 +41,7 @@ Then("{tvar} {operand} {tvar} = {tuple}") do |var1, operand, var2, tuple|
 end
 
 Then("{tvar} {operand} {tvar} = {pvc}") do |var1, operand, var2, pvc|
-  expect(instance_variable_get(var1).public_send(operand, instance_variable_get(var2))).to be_within(EPSILON).of(pvc)
+  expect(instance_variable_get(var1).public_send(operand, instance_variable_get(var2))).to be_within(EPSILON_TUPLE).of(pvc)
 end
 
 Then("{tvar} {operand} {number} = {tuple}") do |var1, operand, number, tuple|
@@ -59,7 +57,7 @@ Then('{tuple_method}\({tvar}) = {number}') do |method, var, value|
 end
 
 Then('{tuple_method}\({tvar}) = (approximately ){vector}') do |method, var, vector|
-  expect(instance_variable_get(var).public_send(method)).to be_within(EPSILON).of(vector)
+  expect(instance_variable_get(var).public_send(method)).to be_within(EPSILON_TUPLE).of(vector)
 end
 
 Then('{tuple_method}\({tvar}, {tvar}) = {number}') do |method, var1, var2, float|
@@ -67,7 +65,7 @@ Then('{tuple_method}\({tvar}, {tvar}) = {number}') do |method, var1, var2, float
 end
 
 Then('{tuple_method}\({tvar}, {tvar}) = {pvc}') do |method, var1, var2, vector|
-  expect(instance_variable_get(var1).public_send(method, instance_variable_get(var2))).to be_within(EPSILON).of(vector)
+  expect(instance_variable_get(var1).public_send(method, instance_variable_get(var2))).to be_within(EPSILON_TUPLE).of(vector)
 end
 
 When('{tvar} ← {tuple_method}\({tvar})') do |var1, method, var2|
