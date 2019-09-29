@@ -118,14 +118,14 @@ end
 
 Then('{mvar}[{int},{int}] = {number}\/{number}') do |matrix, int, int2, number, number2|
   m = instance_variable_get(matrix)
-  expect(m[int,int2]).to eq(number/number2)
+  expect(m[int,int2]).to be_within(1e-15).of(number/number2)
 end
 
 Then("{mvar} is the following {int}x{int} matrix:") do |matrix, int, int2, table|
   m = instance_variable_get(matrix)
   data = table.raw.map { |row| row.map { |i| Float(i) } }
   z = RT::Matrix.build(int, int2) { |row, col| data[row][col] }
-  epsilon = RT::Matrix.build(int, int2) { |i,j| 0.00001 }
+  epsilon = RT::Matrix.build(int, int2) { 0.00001 }
 
   expect(m).to be_within(epsilon).of(z)
 end
@@ -134,7 +134,7 @@ Then('inverse\({mvar}) is the following {int}x{int} matrix:') do |matrix, int, i
   m = instance_variable_get(matrix)
   data = table.raw.map { |row| row.map { |i| Float(i) } }
   z = RT::Matrix.build(int, int2) { |row, col| data[row][col] }
-  epsilon = RT::Matrix.build(int, int2) { |i,j| 0.00001 }
+  epsilon = RT::Matrix.build(int, int2) { 0.00001 }
 
   expect(m.inverse).to be_within(epsilon).of(z)
 end
@@ -149,7 +149,7 @@ Then('{mvar} * inverse\({mvar}) = {mvar}') do |matrix, matrix2, matrix3|
   c = instance_variable_get(matrix)
   b = instance_variable_get(matrix2)
   a = instance_variable_get(matrix3)
-  epsilon = RT::Matrix.build(c.size, c.size) { |i,j| 0.00001 }
+  epsilon = RT::Matrix.build(c.row_count) { 0.00001 }
 
   expect(c * b.inverse).to be_within(epsilon).of(a)
 end

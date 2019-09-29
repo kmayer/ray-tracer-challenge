@@ -8,7 +8,7 @@ class Tuple < ::Vector
     end
 
     def build(array)
-      elements(array.map{ |i| Float(i) })
+      elements(array.map { |i| Rational(i) }).freeze
     end
   end
 
@@ -39,12 +39,12 @@ class Tuple < ::Vector
     self.class.build(to_a.map(&:abs))
   end
 
-  def normalize
-    self / magnitude
-  end
-
   def <=(other)
     x <= other.x && y <= other.y && z <= other.z && w <= other.w
+  end
+
+  def normalize
+    self / magnitude
   end
 end
 
@@ -80,7 +80,7 @@ class Color < Vector
   def to_rgb
     [red, green, blue].map(&:to_i)
   end
-  
+
   # Color blending
   def blend(other)
     fail ArgumentError, other unless other.is_a?(Color)
@@ -93,7 +93,7 @@ class Color < Vector
       *[red, green, blue]
         .map { |rgb| rgb * clamp_max }
         .map { |rgb| rgb.clamp(0, clamp_max) }
-        .map { |rgb| rgb.round(0, half: :even) } 
+        .map { |rgb| rgb.round(0, half: :even) }
     ]
   end
 end
