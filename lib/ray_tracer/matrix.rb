@@ -2,15 +2,21 @@ require 'ice_nine'
 require 'ice_nine/core_ext/object'
 require "matrix"
 
+# Monkey patch ::Matrix so that everything is frozen
+# Can't use refiniments on #initialize because it is
+# called using #send from .new
+class ::Matrix
+  def initialize(rows, column_count = rows[0].size)
+    @rows = rows
+    @column_count = column_count
+    freeze if self.class == RT::Matrix
+  end
+end
+
 module RT
   class Matrix < ::Matrix
     class << self
       include Math
-
-      def initialize(*)
-        super
-        deep_freeze
-      end
 
       # Build a translation matrix by first building an identity matrix
       # then composing (adding) the translation vector to the last column

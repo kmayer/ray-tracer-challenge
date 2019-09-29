@@ -67,6 +67,10 @@ class Vector < Tuple
     ::Vector.elements(first(3))
   end
 
+  # The cross product of our vectors is only the first 3 elements
+  # The fourth element indicates point/vector identity, but also
+  # because the math works out that way. Using ::Vector's native
+  # #cross method breaks becaus of the fourth element.
   def cross(other)
     self.class.build(to_v.cross(other.to_v).to_a << 0)
   end

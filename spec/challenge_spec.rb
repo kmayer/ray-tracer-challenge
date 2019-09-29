@@ -1,9 +1,5 @@
-RSpec.describe RayTracer do
+RSpec.describe RT do
   it "has a version number" do
-    expect(RayTracer::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(false).to eq(true)
+    expect(RT::VERSION).not_to be nil
   end
 end
