@@ -39,14 +39,12 @@ end
 Then('{mvar} * {tvar} = point\({number}\/{number}, {number}, {number}\/{number})') do |matrix, point, n, n2, n3, n4, n5|
   p = instance_variable_get(point)
   p1 = RT::Point[n/n2, n3, n4/n5]
-  epsilon = RT::Matrix.build(p.size, p.size) { |i,j| 0.00001 }
   expect(instance_variable_get(matrix) * p).to be_within(EPSILON_TUPLE).of(p1)
 end
 
 Then('{mvar} * {tvar} = point\({number}\/{number}, {number}\/{number}, {number})') do |matrix, point, n, n2, n3, n4, n5|
   p = instance_variable_get(point)
   p1 = RT::Point[n/n2, n3/n4, n5]
-  epsilon = RT::Matrix.build(p.size, p.size) { |i,j| 0.00001 }
   expect(instance_variable_get(matrix) * p).to be_within(EPSILON_TUPLE).of(p1)
 end
 
