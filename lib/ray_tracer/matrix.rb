@@ -19,26 +19,26 @@ module RT
       # Build a translation matrix by first building an identity matrix
       # then composing (adding) the translation vector to the last column
       def translation(x, y, z)
-        matrix = 
+        matrix =
         [
           [1, 0, 0, x],
           [0, 1, 0, y],
           [0, 0, 1, z],
           [0, 0, 0, 1]
         ]
-        build(4, 4) { |i, j| matrix.dig(i, j) }
+        build(4, 4) { |i, j| Rational(matrix.dig(i, j)) }
       end
 
       # Build a scaling matrix by placing the scaling vector along the diagonal
       def scaling(x, y, z)
-        matrix = 
+        matrix =
         [
           [x, 0, 0, 0],
           [0, y, 0, 0],
           [0, 0, z, 0],
           [0, 0, 0, 1]
         ]
-        build(4, 4) { |i, j| matrix.dig(i, j) }
+        build(4, 4) { |i, j| Rational(matrix.dig(i, j)) }
       end
 
       def rotation_x(r)
@@ -49,7 +49,7 @@ module RT
           [0, sin(r),  cos(r), 0],
           [0,      0,       0, 1],
         ]
-        build(4, 4) { |i, j| matrix.dig(i, j) }
+        build(4, 4) { |i, j| Rational(matrix.dig(i, j)) }
       end
 
       def rotation_y(r)
@@ -60,7 +60,7 @@ module RT
           [-sin(r), 0, cos(r), 0],
           [      0, 0,      0, 1],
         ]
-        build(4, 4) { |i, j| matrix.dig(i, j) }
+        build(4, 4) { |i, j| Rational(matrix.dig(i, j)) }
       end
 
       def rotation_z(r)
@@ -71,18 +71,18 @@ module RT
           [     0,       0, 1, 0],
           [     0,       0, 0, 1],
         ]
-        build(4, 4) { |i, j| matrix.dig(i, j) }
+        build(4, 4) { |i, j| Rational(matrix.dig(i, j)) }
       end
 
       def shearing(xy, xz, yx, yz, zx, zy)
-        matrix = 
+        matrix =
         [
           [1, xy, xz, 0],
           [yx, 1, yz, 0],
           [zx, zy, 1, 0],
           [ 0,  0, 0, 1]
         ]
-        build(4, 4) { |i, j| matrix.dig(i, j) }
+        build(4, 4) { |i, j| Rational(matrix.dig(i, j)) }
       end
       alias_method :skew, :shearing
     end
