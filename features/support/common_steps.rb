@@ -87,6 +87,12 @@ ParameterType(
   }
 )
 
+ParameterType(
+  name: 'transform',
+  regexp: /translation|scaling/,
+  transformer: ->(match) { match }
+)
+
 Given("{tvar} ← {pvc}") do |varname, point|
   instance_variable_set(varname, point)
 end

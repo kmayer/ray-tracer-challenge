@@ -19,3 +19,19 @@ end
 Then("{var}[{int}].{intersection_attr} = {var}") do |var, int, attr, var2|
   expect(instance_variable_get(var)[int].public_send(attr)).to eq(instance_variable_get(var2))
 end
+
+Then("{var}.transform = identity_matrix") do |var|
+  expect(instance_variable_get(var).transform).to eq(RT::Matrix.identity(4))
+end
+
+Then("{var}.transform = {var}") do |sphere, transform|
+  expect(instance_variable_get(sphere).transform).to eq(instance_variable_get(transform))
+end
+
+When('set_transform\({var}, {var})') do |sphere, transform|
+  instance_variable_get(sphere).transform = instance_variable_get(transform)
+end
+
+When('{var}.transform = {transform}\({number}, {number}, {number})') do |sphere, transform, number, number2, number3|
+  instance_variable_get(sphere).transform = RT::Matrix.public_send(transform, number, number2, number3)
+end
