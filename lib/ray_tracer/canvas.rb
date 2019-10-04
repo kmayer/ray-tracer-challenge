@@ -7,15 +7,16 @@ class Canvas
   end
 
   attr_reader :width, :height
-  def initialize(width, height, canvas = Array.new(height) { Array.new(width) { Color[0,0,0] } })
+  def initialize(width, height, canvas: Array.new(height) { Array.new(width) }, default_color: Color[0,0,0])
     @width = Integer(width)
     @height = Integer(height)
     @canvas = canvas
+    @default_color = default_color
     freeze
   end
 
   def [](col, row)
-    @canvas.fetch(row).fetch(col)
+    @canvas.fetch(row).fetch(col) || @default_color
   end
 
   def []=(col, row, value)
@@ -40,7 +41,7 @@ class Canvas
     return to_enum(__method__) unless block_given?
 
     iterator do |col, row|
-      yield @canvas.fetch(row).fetch(col)
+      yield self[col, row]
     end
   end
 
@@ -58,10 +59,10 @@ class Canvas
       buffer << "#{width} #{height}" << "\n"
       buffer << "#{color_max}" << "\n"
       (0...height).each do |row|
-        color_values = 
+        color_values =
           @canvas
             .fetch(row)
-            .map{ |pixel| pixel.scale(color_max) }
+            .map{ |pixel| (pixel || @default_color).scale(color_max) }
             .map(&:to_rgb)
         line = color_values.join(" ")
         buffer << line_wrap(line) << "\n"
