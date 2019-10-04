@@ -42,4 +42,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "cucumber", "~> 4.0.0.rc.1"
   spec.add_development_dependency "filewatcher"
   spec.add_development_dependency "pry-byebug"
+  spec.add_development_dependency "benchmark-ips"
 end
