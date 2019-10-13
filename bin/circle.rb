@@ -21,10 +21,7 @@ module RT
       light_vector = (point - light_source)
       ray = RT::Ray.new(light_source, light_vector)
 
-      if RT::Intersection.hit(sphere.intersect(ray))
-        canvas[x + 50, y + 50] = red
-        # $stderr.puts point
-      end
+      canvas[x + 50, y + 50] = red if RT::Intersection.hit?(sphere.intersect(ray))
     end
 
     return canvas

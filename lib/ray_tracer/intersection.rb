@@ -3,7 +3,7 @@ module RT
     attr_reader :t, :object
 
     class << self
-      def hit(intersections)
+      def hit?(intersections)
         intersections.filter(&:positive?).min
       end
     end

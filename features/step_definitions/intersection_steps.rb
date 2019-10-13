@@ -28,7 +28,7 @@ Then("{var}[{int}].{intersection_attr} = {number}") do |var, int, attr, number|
 end
 
 When('{var} ← hit\({var})') do |i, xs|
-  instance_variable_set(i, RT::Intersection.hit(instance_variable_get(xs)))
+  instance_variable_set(i, RT::Intersection.hit?(instance_variable_get(xs)))
 end
 
 Then("{var} is nothing") do |i|
