@@ -71,3 +71,11 @@ end
 When('{tvar} ← {tuple_method}\({tvar})') do |var1, method, var2|
   instance_variable_set(var1, instance_variable_get(var2).public_send(method))
 end
+
+When('{var} ← reflect\({var}, {var})') do |r, v, n|
+  instance_variable_set(r, instance_variable_get(v).reflect(instance_variable_get(n)))
+end
+
+Given('n ← vector\({rational}, {rational}, {number})') do |x, y, z|
+  instance_variable_set(:@n, RT::Vector[x, y, z])
+end

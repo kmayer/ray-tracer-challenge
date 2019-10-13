@@ -3,7 +3,7 @@ module RT
     attr_reader :origin
     attr_accessor :transform
 
-    def initialize(origin: RT::Point[0, 0, 0], transform: RT::Matrix.identity(4))
+    def initialize(origin: RT::ORIGIN, transform: RT::Matrix.identity(4))
       @origin = origin
       @transform = transform
       # NOT frozen because :transform can be modified
@@ -21,6 +21,14 @@ module RT
 
         [t1, t2].sort.map { |t| RT::Intersection.new(t, self) }
       end
+    end
+
+    def normal_at(point)
+      object_point = transform.invert * point
+      object_normal = object_point - RT::ORIGIN
+      world_normal = transform.invert.transpose * object_normal
+      world_normal = world_normal.to_vector
+      world_normal.normalize
     end
 
     private

@@ -10,7 +10,7 @@ module RT
         expect(Matrix.rotation_y(0)).to be_frozen
         expect(Matrix.shearing(0, 0, 0, 0, 0, 0)).to be_frozen
         expect(Matrix.identity(4) * Matrix.identity(4)).to be_frozen
-        expect(Matrix.identity(4) * Point[0, 0, 0]).to be_frozen
+        expect(Matrix.identity(4) * ORIGIN).to be_frozen
         expect(Matrix.identity(4).minor(0, 0)).to be_frozen
       end
     end

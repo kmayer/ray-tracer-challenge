@@ -8,12 +8,12 @@ ParameterType(
 )
 
 Given("the following {int}x{int} matrix {mvar}:") do |int, int2, matrix, table|
-  data = table.raw.map{ |row| row.map { |i| Float(i) } }
+  data = table.raw.map{ |row| row.map { |i| Rational(i) } }
   instance_variable_set(matrix, RT::Matrix.build(int, int2) { |row, col| data[row][col] })
 end
 
 Given("the following matrix {mvar}:") do |matrix, table|
-  data = table.raw.map{ |row| row.map { |i| Float(i) } }
+  data = table.raw.map{ |row| row.map { |i| Rational(i) } }
   instance_variable_set(matrix, RT::Matrix[*data])
 end
 
@@ -35,7 +35,7 @@ end
 Then("{mvar} * {mvar} is the following {int}x{int} matrix:") do |matrix, matrix2, int, int2, table|
   m = instance_variable_get(matrix)
   n = instance_variable_get(matrix2)
-  data = table.raw.map { |row| row.map { |i| Float(i) } }
+  data = table.raw.map { |row| row.map { |i| Rational(i) } }
   z = RT::Matrix.build(int, int2) { |row, col| data[row][col] }
   expect(m * n).to eq(z)
 end
@@ -62,7 +62,7 @@ end
 
 Then('transpose\({mvar}) is the following matrix:') do |matrix, table|
   m = instance_variable_get(matrix)
-  data = table.raw.map{ |row| row.map { |i| Float(i) } }
+  data = table.raw.map{ |row| row.map { |i| Rational(i) } }
   z = RT::Matrix[*data]
   expect(m.transpose).to eq(z)
 end
@@ -82,7 +82,7 @@ Then('determinant\({mvar}) = {number}') do |matrix, number|
 end
 
 Then('submatrix\({mvar}, {int}, {int}) is the following {int}x{int} matrix:') do |matrix, int, int2, int3, int4, table|
-  data = table.raw.map{ |row| row.map { |i| Float(i) } }
+  data = table.raw.map{ |row| row.map { |i| Rational(i) } }
   z = RT::Matrix.build(int3, int4) { |row, col| data[row][col] }
 
   m = instance_variable_get(matrix)
@@ -103,7 +103,7 @@ Then('cofactor\({mvar}, {int}, {int}) = {number}') do |matrix, int, int2, number
   m = instance_variable_get(matrix)
   expect(m.cofactor(int, int2)).to eq(number)
 end
-  
+
 Then("{mvar} is invertible") do |matrix|
   expect(instance_variable_get(matrix)).to be_invertible
 end
@@ -124,7 +124,7 @@ end
 
 Then("{mvar} is the following {int}x{int} matrix:") do |matrix, int, int2, table|
   m = instance_variable_get(matrix)
-  data = table.raw.map { |row| row.map { |i| Float(i) } }
+  data = table.raw.map { |row| row.map { |i| Rational(i) } }
   z = RT::Matrix.build(int, int2) { |row, col| data[row][col] }
   epsilon = RT::Matrix.build(int, int2) { 0.00001 }
 
@@ -133,7 +133,7 @@ end
 
 Then('inverse\({mvar}) is the following {int}x{int} matrix:') do |matrix, int, int2, table|
   m = instance_variable_get(matrix)
-  data = table.raw.map { |row| row.map { |i| Float(i) } }
+  data = table.raw.map { |row| row.map { |i| Rational(i) } }
   z = RT::Matrix.build(int, int2) { |row, col| data[row][col] }
   epsilon = RT::Matrix.build(int, int2) { 0.00001 }
 

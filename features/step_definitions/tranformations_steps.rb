@@ -1,11 +1,3 @@
-Given('{mvar} ← translation\({int}, {int}, {int})') do |matrix, int, int2, int3|
-  instance_variable_set(matrix, RT::Matrix.translation(int, int2, int3))
-end
-
-Given('{mvar} ← scaling\({int}, {int}, {int})') do |matrix, int, int2, int3|
-  instance_variable_set(matrix, RT::Matrix.scaling(int, int2, int3))
-end
-
 Then('{tvar} ← {mvar} * {tvar}') do |point, matrix, point2|
   instance_variable_set(point, instance_variable_get(matrix) * instance_variable_get(point2))
 end
@@ -24,13 +16,6 @@ Then("{mvar} * {tvar} = {tvar}") do |matrix, point, point2|
   v2 = instance_variable_get(point2)
   expect(instance_variable_get(matrix) * v).to eq(v2)
 end
-
-ParameterType(
-  name: 'rotation',
-  regexp: /rotation_[xyz]/,
-  transformer: -> ( match ) { match.to_sym },
-  use_for_snippets: false
-)
 
 Given('{mvar} ← {rotation}\(π / {number})') do |matrix, rotation, number|
   instance_variable_set(matrix, RT::Matrix.public_send(rotation, Math::PI / number))

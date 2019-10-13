@@ -47,6 +47,10 @@ class Tuple < ::Vector
   def normalize
     self / magnitude
   end
+
+  def to_vector
+    RT::Vector[x,y,z]
+  end
 end
 
 class Point < Tuple
@@ -75,6 +79,10 @@ class Vector < Tuple
   def cross(other)
     self.class.build(to_v.cross(other.to_v).to_a << 0)
   end
+
+  def reflect(normal)
+    self - normal * 2 * self.dot(normal)
+  end
 end
 
 class Color < Vector
@@ -102,4 +110,5 @@ class Color < Vector
     ]
   end
 end
+  ORIGIN = RT::Point[0,0,0]
 end

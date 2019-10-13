@@ -35,3 +35,41 @@ end
 When('{var}.transform = {transform}\({number}, {number}, {number})') do |sphere, transform, number, number2, number3|
   instance_variable_get(sphere).transform = RT::Matrix.public_send(transform, number, number2, number3)
 end
+
+When('{var} ← normal_at\({var}, {pvc})') do |normal_vector, sphere, point|
+  instance_variable_set(normal_vector, instance_variable_get(sphere).normal_at(point))
+end
+
+When('{var} ← normal_at\({var}, {var})') do |normal_vector, sphere, point|
+  instance_variable_set(normal_vector, instance_variable_get(sphere).normal_at(instance_variable_get(point)))
+end
+
+Given('{var} ← point\({rational}, {rational}, {rational})') do |var, x, y, z|
+  instance_variable_set(var, RT::Point[x, y, z])
+end
+
+Given('{var} ← point\({number}, {rational}, {rational})') do |var, x, y, z|
+  instance_variable_set(var, RT::Point[x, y, z])
+end
+
+Then('{var} ← vector\({rational}, {rational}, {rational})') do |var, x, y, z|
+  instance_variable_set(var, RT::Vector[x, y, z])
+end
+
+Then('{var} = vector\({rational}, {rational}, {rational})') do |var, x, y, z|
+  expect(instance_variable_get(var)).to be_within(EPSILON_TUPLE).of(RT::Vector[x, y, z])
+end
+
+Then('{var} = normalize\({var})') do |var, _same_var|
+  expect(var).to eq(_same_var)
+  n = instance_variable_get(var)
+  expect(n).to eq(n.normalize)
+end
+
+Given('m ← {transform}\({number}, {number}, {number}) * {rotation}\(π\/{number})') do |transform, x, y, z, rotation, r|
+  t1 = RT::Matrix.public_send(transform, x, y, z)
+  t2 = RT::Matrix.public_send(rotation, r)
+  instance_variable_set(:@m, t1 * t2)
+end
+
+

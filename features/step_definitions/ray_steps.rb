@@ -27,10 +27,6 @@ Then('position\({var}, {number}) = {pvc}') do |ray, t, point|
   expect(instance_variable_get(ray).public_send(:position, t)).to eq(point)
 end
 
-Given('{var} ← {transform}\({int}, {int}, {int})') do |matrix, transform, int, int2, int3|
-  instance_variable_set(matrix, RT::Matrix.public_send(transform, int, int2, int3))
-end
-
 When('{var} ← transform\({var}, {var})') do |r2, r, m|
   instance_variable_set(r2, instance_variable_get(r).transform(instance_variable_get(m)))
 end
