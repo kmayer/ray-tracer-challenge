@@ -110,6 +110,13 @@ ParameterType(
   transformer: ->(match) { match }
 )
 
+ParameterType(
+  name: 'rotation',
+  regexp: /rotation_[xyz]/,
+  transformer: -> ( match ) { match.to_sym },
+  use_for_snippets: false
+)
+
 Given("{tvar} ← {pvc}") do |varname, point|
   instance_variable_set(varname, point)
 end
@@ -122,9 +129,3 @@ Then('{var} = {pvc}') do |normal_vector, vector|
   expect(instance_variable_get(normal_vector)).to be_within(EPSILON_TUPLE).of(vector)
 end
 
-ParameterType(
-  name: 'rotation',
-  regexp: /rotation_[xyz]/,
-  transformer: -> ( match ) { match.to_sym },
-  use_for_snippets: false
-)
