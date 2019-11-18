@@ -1,11 +1,11 @@
 Feature: Materials
 
 Background:
-  Given m ← material()
+  Given m ← material
     And position ← point(0, 0, 0)
 
 Scenario: The default material
-  Given m ← material()
+  Given m ← material
   Then m.color = color(1, 1, 1)
     And m.ambient = 0.1
     And m.diffuse = 0.9
@@ -13,11 +13,11 @@ Scenario: The default material
     And m.shininess = 200.0
 
 Scenario: Reflectivity for the default material
-  Given m ← material()
+  Given m ← material
   Then m.reflective = 0.0
 
 Scenario: Transparency and Refractive Index for the default material
-  Given m ← material()
+  Given m ← material
   Then m.transparency = 0.0
     And m.refractive_index = 1.0
 

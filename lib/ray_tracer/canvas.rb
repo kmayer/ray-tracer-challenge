@@ -7,7 +7,7 @@ class Canvas
   end
 
   attr_reader :width, :height
-  def initialize(width, height, canvas: Array.new(height) { Array.new(width) }, default_color: Color[0,0,0])
+  def initialize(width, height, canvas: Array.new(height) { Array.new(width) }, default_color: RT::BLACK)
     @width = Integer(width)
     @height = Integer(height)
     @canvas = canvas
@@ -21,6 +21,8 @@ class Canvas
 
   def []=(col, row, value)
     @canvas.fetch(row)[col] = value.dup
+  rescue => e
+    warn "Skipped [#{col}, #{row}], #{e.message}"
   end
 
   def plot(point, color)

@@ -1,12 +1,16 @@
+require_relative "material"
+
 module RT
   class Sphere
     attr_reader :origin
     attr_accessor :transform
+    attr_reader :material
 
-    def initialize(origin: RT::ORIGIN, transform: RT::Matrix.identity(4))
+    def initialize(origin: RT::ORIGIN, transform: RT::Matrix.identity(4), material: RT::Material.new)
       @origin = origin
       @transform = transform
-      # NOT frozen because :transform can be modified
+      @material = material
+      # NOT frozen because :transform & :material can be modified
     end
 
     def intersect(ray)

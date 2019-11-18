@@ -14,7 +14,7 @@ ParameterType(
 
 ParameterType(
   name: 'tvar',
-  regexp: /[a-z][1-4]?|zero|norm|red|origin|direction/,
+  regexp: /[a-z][1-4]?|zero|norm|red|origin|direction|intensity|position|light|eyev|normalv|light/,
   transformer: -> ( match ) { "@#{match}".to_sym },
   use_for_snippets: false
 )
@@ -127,5 +127,13 @@ end
 
 Then('{var} = {pvc}') do |normal_vector, vector|
   expect(instance_variable_get(normal_vector)).to be_within(EPSILON_TUPLE).of(vector)
+end
+
+Then('{tvar} ← vector\({number}, {rational}, {rational})') do |var, x, y, z|
+  instance_variable_set(var, RT::Vector[x, y, z])
+end
+
+Then('{tvar} ← vector\({rational}, {rational}, {rational})') do |var, x, y, z|
+  instance_variable_set(var, RT::Vector[x, y, z])
 end
 

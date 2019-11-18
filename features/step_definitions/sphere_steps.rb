@@ -52,10 +52,6 @@ Given('{var} ← point\({number}, {rational}, {rational})') do |var, x, y, z|
   instance_variable_set(var, RT::Point[x, y, z])
 end
 
-Then('{var} ← vector\({rational}, {rational}, {rational})') do |var, x, y, z|
-  instance_variable_set(var, RT::Vector[x, y, z])
-end
-
 Then('{var} = vector\({rational}, {rational}, {rational})') do |var, x, y, z|
   expect(instance_variable_get(var)).to be_within(EPSILON_TUPLE).of(RT::Vector[x, y, z])
 end
